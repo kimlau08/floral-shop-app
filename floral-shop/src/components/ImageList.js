@@ -1,6 +1,4 @@
 
-import img1 from '../assets/easter-eggs-1.jpg';
-
 import img2 from '../assets/appointment2_page.jpg';
 import img3 from '../assets/appointment_page.jpg';
 import img4 from '../assets/bday_event.jpg';
@@ -18,11 +16,7 @@ import img15 from '../assets/wedding2_event.jpg';
 import img16 from '../assets/wedding3_event.jpg';
 
 
-
-
-
 let ImageList = [];
-ImageList.push(img1);
 ImageList.push(img2);
 ImageList.push(img3);
 ImageList.push(img4);
