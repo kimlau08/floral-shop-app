@@ -26,13 +26,45 @@ export default class App extends Component {
     super(props);
 
     this.state={
-      
+      calendarEventList: [
+        // initial event data
+        { title: "Event Now", start: new Date() }
+      ],
       containerOnDisplay: "home-container"
     }
 
     this.swapContainerOnDisplay=this.swapContainerOnDisplay.bind(this);
     this.setContainerOnDisplay=this.setContainerOnDisplay.bind(this);
+    this.getcalendarEventList=this.getcalendarEventList.bind(this);
+    this.addCalendarEvent=this.addCalendarEvent.bind(this);
+    this.deleteCalendarEvent=this.deleteCalendarEvent.bind(this);
 
+  }
+
+  getcalendarEventList() {
+    return ( this.state.calendarEventList );
+  }
+  addCalendarEvent(eventObj) {
+    let eventList = this.state.calendarEventList;
+    eventList.push(eventObj);
+    this.setState( {calendarEventList: eventList} );
+  }
+  deleteCalendarEvent(eventObj) {
+
+    let eventList = this.state.calendarEventList;
+    let i=0;
+    for (i=0; i<eventList.length; i++) {
+      if (eventList[i].title === eventObj.title &&
+          eventList[i].start === eventObj.start ) {
+        break; //found the match
+      }
+    }
+    if (i < eventList.length) {
+      //match has been found
+      eventList.splice(i, 1)
+    }
+    
+    this.setState( {calendarEventList: eventList} );
   }
 
   navBar() {
@@ -64,6 +96,9 @@ export default class App extends Component {
                   <Link to={{
                       pathname: "/Appointment",
                       swapDisplayCallback: this.swapContainerOnDisplay,
+                      getEventListCallback: this.getcalendarEventList,
+                      addEventCallback: this.addCalendarEvent,
+                      deleteEventCallback: this.deleteCalendarEvent
                     }}>Appointments</Link>
               </li>
           </ul>

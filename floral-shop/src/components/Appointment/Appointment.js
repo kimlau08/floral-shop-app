@@ -7,6 +7,7 @@ import axios from 'axios';
 import config from '../../config/config';
 import CalendarApp from './CalendarApp';
 
+let tempEvents=[];
 export default class Appointment extends Component {
 
     constructor(props) {
@@ -29,9 +30,11 @@ export default class Appointment extends Component {
         this.handleDateTimeChange=this.handleDateTimeChange.bind(this);
         this.handleOccasionChange=this.handleOccasionChange.bind(this);
         this.handleQuantityChange=this.handleQuantityChange.bind(this);
-        this.handleReserve=this.handleCancel.bind(this);
+        this.handleReserve=this.handleReserve.bind(this);
+        this.handleCancel=this.handleCancel.bind(this);
 
         this.validateEmail=this.valdateEmail.bind(this);
+        this.updateDateTime=this.updateDateTime.bind(this);
     }
 
     handleNameChange(event) {
@@ -81,6 +84,8 @@ export default class Appointment extends Component {
             this.setState( {bookingList: bookings} );
         } 
 
+        tempEvents = [];  //clear unconfirmed event
+
         //Redirect back to root (App component)
         this.setState( { redirectToHome: true } ); 
         //swap back to the Home component display before redirect
@@ -88,6 +93,10 @@ export default class Appointment extends Component {
 
     }
     handleCancel(event) {
+
+        //delete unconfirmed temp event
+        tempEvents.map(eventObj => {this.props.location.deleteEventCallback(eventObj)}  )
+        tempEvents = [];  //clear unconfirmed event
 
         //Redirect back to root (App component)
         this.setState( { redirectToHome: true } ); 
@@ -116,8 +125,9 @@ export default class Appointment extends Component {
         }
     }
 
-    updateDateTime(dateTimeStr, dateTimeInputId) {
-        document.getElementById(dateTimeInputId).value = dateTimeStr;
+    updateDateTime(eventObj) {
+        this.setState( {dateTime: eventObj.start} ) ;
+        tempEvents.push(eventObj);  //remember unconfirmed event. it can be confirmed/cancelled at form submit
     }
 
     render() {
@@ -145,7 +155,7 @@ export default class Appointment extends Component {
                 <p className="reservation-title">Brighten someone's day with flowers</p>
                 <p className="reservation-title">Make an appointment with our designer today</p><br />
 
-                <form className="reservation-form">
+                <form className="reservation-form" onSubmit={this.handleReserve}>
 
                     <div className="input-container">
 
@@ -179,11 +189,10 @@ export default class Appointment extends Component {
                                 <option value="birthday">Birthday</option>
                                 <option value="wedding">Wedding</option>
                             </select>
-                {/* <input className="text-input" type="text" value={this.state.occasion} placeholder="occasion type" onChange={this.handleOccasionChange} /> */}
                         </label>
 
                         <div className="button-row">
-                            <button className="form-button" onClick={this.handleReserve} >Update</button>  
+                            <button type="submit" className="form-button" >Update</button>  
                             <button className="form-button" onClick={this.handleCancel} >Cancel</button>  
                         </div>
                     </div>
@@ -194,6 +203,10 @@ export default class Appointment extends Component {
                         dateTimeId={dateTimeInputId}
                         nameId={nameInputId}
                         updateDateTimeCallBack={this.updateDateTime}
+                        
+                        getEventListCallback={this.props.location.getEventListCallback}
+                        addEventCallback={this.props.location.addEventCallback}
+                        deleteEventCallback={this.props.location.deleteEventCallback}
                     />
                 </div>
 

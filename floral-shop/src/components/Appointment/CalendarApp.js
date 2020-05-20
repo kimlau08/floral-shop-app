@@ -12,19 +12,20 @@ import "@fullcalendar/daygrid/main.css";
 import "@fullcalendar/timegrid/main.css";
 
 
-let calendarEventList = [
-  // initial event data
-  { title: "Event Now", start: new Date() }
-]
 let nameElem = {};
 let dateTimeId = {};
 export default class CalendarApp extends React.Component {
   constructor(props) {
     super(props);
 
+    
+    let eventList = [];
+    if (props.getEventListCallback !== undefined) {
+      eventList = props.getEventListCallback();
+    }
     this.state = {
       calendarWeekends: true,
-      calendarEvents: calendarEventList
+      calendarEvents: eventList
     };
   
   }
@@ -47,7 +48,7 @@ export default class CalendarApp extends React.Component {
       alert("Please enter your name first");
       return <div></div>   //need a name to make reservation
     }
-
+    
     return (
       <div className="calendar-app">
         <div className="calendar-app-top">
@@ -65,7 +66,7 @@ export default class CalendarApp extends React.Component {
             plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
             ref={this.calendarComponentRef}
             weekends={this.state.calendarWeekends}
-            events={this.state.calendarEvents}
+            events={ this.state.calendarEvents }
             dateClick={this.handleDateClick}
             eventClick={this.handleEventClick}
           />
@@ -77,18 +78,24 @@ export default class CalendarApp extends React.Component {
   handleDateClick = arg => {
     console.log(arg);
     if (window.confirm("Adding an 1 hr appt at " + arg.date + " ?")) {
-      this.props.updateDateTimeCallBack(arg.date, dateTimeId);
-      this.setState({
-        
-        // add new event data
-        calendarEvents: this.state.calendarEvents.concat({
-          // creates a new array
+
+      let eventObj = {
+        // new event data
           title: nameElem.value,
           start: arg.date,
           allDay: arg.allDay
-        })
+        };
+
+      //update local state to redraw
+      this.setState({        
+        calendarEvents: this.state.calendarEvents.concat(eventObj)
       });
-      calendarEventList = this.state.calendarEvents;
+
+      //update form
+      this.props.updateDateTimeCallBack(eventObj);
+
+      //update global state      
+      this.props.addEventCallback(eventObj);
     }
   };
 
