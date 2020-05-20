@@ -52,14 +52,9 @@ export default class App extends Component {
   deleteCalendarEvent(eventObj) {
 
     let eventList = this.state.calendarEventList;
-    let i=0;
-    for (i=0; i<eventList.length; i++) {
-      if (eventList[i].title === eventObj.title &&
-          eventList[i].start === eventObj.start ) {
-        break; //found the match
-      }
-    }
-    if (i < eventList.length) {
+    let i = eventList.findIndex(obj => obj.title === eventObj.title && 
+                            obj.start.toString() === eventObj.start.toString())
+    if (i > 0) {
       //match has been found
       eventList.splice(i, 1)
     }

@@ -102,7 +102,7 @@
     margin: 0 0 3em;
   }
   
-  .calendar-app-calendar {
+  #calendar-app-calendar {
     margin: 0 auto;
     max-width: 500px;
     background-color: lightsteelblue;

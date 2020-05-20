@@ -54,7 +54,7 @@ export default class CalendarApp extends React.Component {
         <div className="calendar-app-top">
           &nbsp; (click a date/time to add appointment)
         </div>
-        <div className="calendar-app-calendar">
+        <div id="calendar-app-calendar">
           <FullCalendar
             defaultView="timeGridWeek"
             header={{
@@ -100,8 +100,27 @@ export default class CalendarApp extends React.Component {
   };
 
   handleEventClick = arg => {
-    window.alert("Please pick new time to schedule. Update without time to cancel")
-    
+   
+    if (window.confirm("Confirm deleting appointment ? (To reschedule, please add another appointment afterwards)")) {
+      
+      let eventObj = {
+        title: arg.event.title,
+        start: arg.event.start
+      }
 
+      //update local state to redraw
+      let i = this.state.calendarEvents.findIndex(obj => obj.title === eventObj.title && 
+                                              obj.start.toString() === eventObj.start.toString());
+      let arr = this.state.calendarEvents;
+      arr.splice(i, 1);
+      this.setState({        
+        calendarEvents: arr
+      });
+
+      //update global state      
+      this.props.deleteEventCallback(eventObj);
+
+      this.props.closeFormCallBack();   //close appointment form and redirect to home
+    }
   }
 }

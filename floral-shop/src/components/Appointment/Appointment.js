@@ -30,6 +30,7 @@ export default class Appointment extends Component {
         this.handleDateTimeChange=this.handleDateTimeChange.bind(this);
         this.handleOccasionChange=this.handleOccasionChange.bind(this);
         this.handleQuantityChange=this.handleQuantityChange.bind(this);
+        this.closeForm=this.closeForm.bind(this);
         this.handleReserve=this.handleReserve.bind(this);
         this.handleCancel=this.handleCancel.bind(this);
 
@@ -56,6 +57,14 @@ export default class Appointment extends Component {
         this.setState({quantity: event.target.value}); //update the value state when the field is changed
     }
 
+    closeForm() {
+        
+        //Redirect back to root (App component)
+        this.setState( { redirectToHome: true } ); 
+        //swap back to the Home component display before redirect
+        this.props.location.swapDisplayCallback("home-container", this.props);
+    }
+    
     handleReserve(event) {
 
         if (event.target.elements === undefined) {
@@ -77,7 +86,7 @@ export default class Appointment extends Component {
 
         event.preventDefault();
 
-        if (window.confirm("Submitting reservation")) {
+        if (window.confirm("Confirming appointment")) {
             //update booking list
             let bookings = this.state.bookingList;
             bookings.push(bookingObj);
@@ -86,10 +95,7 @@ export default class Appointment extends Component {
 
         tempEvents = [];  //clear unconfirmed event
 
-        //Redirect back to root (App component)
-        this.setState( { redirectToHome: true } ); 
-        //swap back to the Home component display before redirect
-        this.props.location.swapDisplayCallback("home-container", this.props);
+        this.closeForm();  //redirect to home
 
     }
     handleCancel(event) {
@@ -98,10 +104,7 @@ export default class Appointment extends Component {
         tempEvents.map(eventObj => {this.props.location.deleteEventCallback(eventObj)}  )
         tempEvents = [];  //clear unconfirmed event
 
-        //Redirect back to root (App component)
-        this.setState( { redirectToHome: true } ); 
-        //swap back to the Home component display before redirect
-        this.props.location.swapDisplayCallback("home-container", this.props);
+        this.closeForm();  //redirect to home
     }
     
     async valdateEmail(event) {
@@ -192,7 +195,7 @@ export default class Appointment extends Component {
                         </label>
 
                         <div className="button-row">
-                            <button type="submit" className="form-button" >Update</button>  
+                            <button type="submit" className="form-button" >Book</button>  
                             <button className="form-button" onClick={this.handleCancel} >Cancel</button>  
                         </div>
                     </div>
@@ -203,6 +206,7 @@ export default class Appointment extends Component {
                         dateTimeId={dateTimeInputId}
                         nameId={nameInputId}
                         updateDateTimeCallBack={this.updateDateTime}
+                        closeFormCallBack={this.closeForm}
                         
                         getEventListCallback={this.props.location.getEventListCallback}
                         addEventCallback={this.props.location.addEventCallback}
