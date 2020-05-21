@@ -30,4 +30,9 @@
 ### Appointment - CRUD using calendar component.
 ### Gifs:
 ###   Breezes in Tulip field (in App.js)
-# 
+#
+# CRUD operations on appointments using calendar
+### Create one or multiple appointments in one reservation
+### Display all appointments on current week and any other weeks.
+##  Update/Reschedule one or multiple appointments in one reservation
+##  Delete one or multiple appointments in one reservation
