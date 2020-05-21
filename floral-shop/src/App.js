@@ -13,11 +13,6 @@ import Event from './components/Event';
 import AboutUs from './components/AboutUs';
 import Appointment from './components/Appointment/Appointment';
 
-import img1 from './assets/home_page.png';
-import img2 from './assets/mom_event.jpg';
-import img3 from './assets/appointment_page1.png';
-import img4 from './assets/bday_event.jpg';
-
 import HomeImg from './assets/flower-in-breeze1.gif';
 
 export default class App extends Component {
@@ -28,7 +23,7 @@ export default class App extends Component {
     this.state={
       calendarEventList: [
         // initial event data
-        { title: "Event Now", start: new Date() }
+           //  event for debug only { title: "Event Now", start: new Date() }
       ],
       containerOnDisplay: "home-container"
     }
@@ -38,6 +33,7 @@ export default class App extends Component {
     this.getcalendarEventList=this.getcalendarEventList.bind(this);
     this.addCalendarEvent=this.addCalendarEvent.bind(this);
     this.deleteCalendarEvent=this.deleteCalendarEvent.bind(this);
+    this.resetEventColor=this.resetEventColor.bind(this);
 
   }
 
@@ -54,12 +50,21 @@ export default class App extends Component {
     let eventList = this.state.calendarEventList;
     let i = eventList.findIndex(obj => obj.title === eventObj.title && 
                             obj.start.toString() === eventObj.start.toString())
-    if (i > 0) {
+    if (i >= 0) {
       //match has been found
       eventList.splice(i, 1)
     }
     
     this.setState( {calendarEventList: eventList} );
+  }
+  resetEventColor(tempObj) {
+
+    this.state.calendarEventList.map( obj => {
+      if (obj.title === tempObj.title && 
+          obj.start.toString() === tempObj.start.toString()) {
+            obj.backgroundColor = ''
+        }
+    })
   }
 
   navBar() {
@@ -93,7 +98,8 @@ export default class App extends Component {
                       swapDisplayCallback: this.swapContainerOnDisplay,
                       getEventListCallback: this.getcalendarEventList,
                       addEventCallback: this.addCalendarEvent,
-                      deleteEventCallback: this.deleteCalendarEvent
+                      deleteEventCallback: this.deleteCalendarEvent,
+                      resetEventColorCallBack : this.resetEventColor
                     }}>Appointments</Link>
               </li>
           </ul>

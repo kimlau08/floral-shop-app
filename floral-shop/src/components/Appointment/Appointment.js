@@ -8,6 +8,7 @@ import config from '../../config/config';
 import CalendarApp from './CalendarApp';
 
 let tempEvents=[];
+let tempDeletedEvents=[];
 export default class Appointment extends Component {
 
     constructor(props) {
@@ -36,6 +37,7 @@ export default class Appointment extends Component {
 
         this.validateEmail=this.valdateEmail.bind(this);
         this.updateDateTime=this.updateDateTime.bind(this);
+        this.markDateTimeDeleted=this.markDateTimeDeleted.bind(this);
     }
 
     handleNameChange(event) {
@@ -86,23 +88,33 @@ export default class Appointment extends Component {
 
         event.preventDefault();
 
-        if (window.confirm("Confirming appointment")) {
+        if (window.confirm("Confirming update")) {
             //update booking list
             let bookings = this.state.bookingList;
             bookings.push(bookingObj);
             this.setState( {bookingList: bookings} );
+
+            //delete events marked for deletion        
+            tempDeletedEvents.map(eventObj => {this.props.location.deleteEventCallback(eventObj)}  )
+            
+            tempEvents = [];  //clear unconfirmed events
+            tempDeletedEvents = [];
+        
+            this.closeForm();  //redirect to home
+
         } 
-
-        tempEvents = [];  //clear unconfirmed event
-
-        this.closeForm();  //redirect to home
 
     }
     handleCancel(event) {
 
         //delete unconfirmed temp event
         tempEvents.map(eventObj => {this.props.location.deleteEventCallback(eventObj)}  )
-        tempEvents = [];  //clear unconfirmed event
+
+        //reset highlight color for events marked for deletion 
+        tempDeletedEvents.map(eventObj => {this.props.location.resetEventColorCallBack(eventObj)}  )
+
+        tempEvents = [];  //clear unconfirmed events
+        tempDeletedEvents = [];
 
         this.closeForm();  //redirect to home
     }
@@ -131,6 +143,9 @@ export default class Appointment extends Component {
     updateDateTime(eventObj) {
         this.setState( {dateTime: eventObj.start} ) ;
         tempEvents.push(eventObj);  //remember unconfirmed event. it can be confirmed/cancelled at form submit
+    }
+    markDateTimeDeleted(eventObj) {
+        tempDeletedEvents.push(eventObj);  //actually delete when confirming update, i.e. in handleReserve
     }
 
     render() {
@@ -195,7 +210,7 @@ export default class Appointment extends Component {
                         </label>
 
                         <div className="button-row">
-                            <button type="submit" className="form-button" >Book</button>  
+                            <button type="submit" className="form-button" >Update Booking</button>  
                             <button className="form-button" onClick={this.handleCancel} >Cancel</button>  
                         </div>
                     </div>
@@ -206,7 +221,7 @@ export default class Appointment extends Component {
                         dateTimeId={dateTimeInputId}
                         nameId={nameInputId}
                         updateDateTimeCallBack={this.updateDateTime}
-                        closeFormCallBack={this.closeForm}
+                        markDateTimeCallBack={this.markDateTimeDeleted}
                         
                         getEventListCallback={this.props.location.getEventListCallback}
                         addEventCallback={this.props.location.addEventCallback}

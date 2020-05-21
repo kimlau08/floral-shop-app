@@ -13,7 +13,7 @@ import "@fullcalendar/timegrid/main.css";
 
 
 let nameElem = {};
-let dateTimeId = {};
+let tempDeletedEventArgs = [];
 export default class CalendarApp extends React.Component {
   constructor(props) {
     super(props);
@@ -39,7 +39,6 @@ export default class CalendarApp extends React.Component {
     }
 
     nameElem = document.getElementById(this.props.nameId);
-    dateTimeId = this.props.dateTimeId;
     if (nameElem === null) {
       return <div></div>   //no name element to identify guest
     }
@@ -108,19 +107,20 @@ export default class CalendarApp extends React.Component {
         start: arg.event.start
       }
 
-      //update local state to redraw
-      let i = this.state.calendarEvents.findIndex(obj => obj.title === eventObj.title && 
-                                              obj.start.toString() === eventObj.start.toString());
-      let arr = this.state.calendarEvents;
-      arr.splice(i, 1);
-      this.setState({        
-        calendarEvents: arr
-      });
+      //mark event to be deleted      
+      tempDeletedEventArgs.push(arg);  //track marked event to continue color highlight on re-renders
+      tempDeletedEventArgs.map( arg => arg.el.style.backgroundColor = 'orange' );
 
-      //update global state      
-      this.props.deleteEventCallback(eventObj);
+      this.state.calendarEvents.map(obj => {if (obj.title === eventObj.title && 
+                                                 obj.start.toString() === eventObj.start.toString()) {
+                                                    obj.backgroundColor = 'orange'
+                                            }}
+                                        );
 
-      this.props.closeFormCallBack();   //close appointment form and redirect to home
+      window.alert("To reschedule, please add another event. Otherwise, click 'Update Booking' to complete")
+
+      this.props.markDateTimeCallBack(eventObj); //mark event to be deleted. takes effect when Update Booking
+
     }
   }
 }
