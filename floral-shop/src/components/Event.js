@@ -10,18 +10,17 @@ import dinnerImg from '../assets/dinner_event.jpg';
 
 export default function Event(props) {
 
-    
     let toContainerId="event-container";
 
-    if (props.location.swapDisplayCallback !== undefined) {
-        props.location.swapDisplayCallback(toContainerId, props);
+    if (props.swapContainerOnDisplay !== undefined) {
+        props.swapContainerOnDisplay(toContainerId, props);
     }
 
     return (  
         <div id={toContainerId}>
             
             <div className="event-box">
-                <img className="event-img" src={wedImg} />
+                <img className="event-img" src={wedImg} alt="Wedding floral arangement sample"/>
                 <div className="event-desc-box">
                 <br /><br /> <br /><br />
                     <h3>WEDDINGS</h3>
@@ -35,13 +34,13 @@ export default function Event(props) {
                     <h3>SHOWERS</h3>
                     <p className="event-desc">We can assist in the floral designs for your bridal shower, bro-dal shower and baby shower</p>
                 </div>
-                <img className="event-img" src={showerImg} />
+                <img className="event-img" src={showerImg} alt="Shower floral arangement sample"/>
             </div>
 
             <br /><br /><br />
 
             <div className="event-box">
-                <img className="event-img" src={annImg} />
+                <img className="event-img" src={annImg} alt="Annversary floral arangement sample" />
                 <div className="event-desc-box">
                 <br /><br /> <br /><br />
                     <h3>ANNIVERSARY</h3>
@@ -55,13 +54,13 @@ export default function Event(props) {
                     <h3>EVENTS</h3>
                     <p className="event-desc">fresh floral arrangements that will complement any event</p>
                 </div>
-                <img className="event-img" src={bdayImg} />
+                <img className="event-img" src={bdayImg} alt="Special occasion floral arangement sample" />
             </div>
 
             <br /><br /><br />
 
             <div className="event-box">
-                <img className="event-img" src={funeralImg} />
+                <img className="event-img" src={funeralImg} alt="Funeral floral arangement sample"/>
                 <div className="event-desc-box">
                 <br /><br /> <br /><br />
                     <h3>FUNERALS</h3>
@@ -75,7 +74,7 @@ export default function Event(props) {
                     <h3>SPECIAL DINNERS</h3>
                     <p className="event-desc">We will design intimate floral dinner combinations for your personal space</p>
                 </div>
-                <img className="event-img" src={dinnerImg} />
+                <img className="event-img" src={dinnerImg} alt="Dinner floral arangement sample"/>
             </div>
         </div>
     )

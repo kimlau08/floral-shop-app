@@ -1,11 +1,9 @@
 import React, { Component } from 'react';
 import './App.css';
-import axios from 'axios';
-import {Route, Link, Switch, BrowserRouter as Router } from 'react-router-dom';
-import { Redirect } from 'react-router-dom';
+import {Route, Link, Routes, BrowserRouter as Router } from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
 
 
-import ImageList from './components/ImageList';
 import PastWorkList from './components/PastWorkList';
 
 import Home from './components/Home';
@@ -59,7 +57,7 @@ export default class App extends Component {
   }
   resetEventColor(tempObj) {
 
-    this.state.calendarEventList.map( obj => {
+    this.state.calendarEventList.foreach( obj => {
       if (obj.title === tempObj.title && 
           obj.start.toString() === tempObj.start.toString()) {
             obj.backgroundColor = ''
@@ -75,44 +73,40 @@ export default class App extends Component {
         <nav className="menu">
           <ul className="menu-bar">
               <li>
-              <Link to={{
-                      pathname: "/Home",
-                      swapDisplayCallback: this.swapContainerOnDisplay,
-                    }}>Home</Link>
+                <Link to="/Home">Home</Link> 
               </li>
               <li>
-              <Link to={{
-                      pathname: "/Event",
-                      swapDisplayCallback: this.swapContainerOnDisplay,
-                    }}>Our Events</Link>
+              <Link to="/Event">Our Events</Link>
               </li>
               <li>
-              <Link to={{
-                      pathname: "/AboutUs",
-                      swapDisplayCallback: this.swapContainerOnDisplay,
-                    }}>About Us</Link>
+              <Link to="/AboutUs">About Us</Link>
               </li>
               <li>
-                  <Link to={{
-                      pathname: "/Appointment",
-                      swapDisplayCallback: this.swapContainerOnDisplay,
-                      getEventListCallback: this.getcalendarEventList,
-                      addEventCallback: this.addCalendarEvent,
-                      deleteEventCallback: this.deleteCalendarEvent,
-                      resetEventColorCallBack : this.resetEventColor
-                    }}>Appointments</Link>
+                  <Link to="/Appointment">Appointments</Link>
               </li>
           </ul>
         </nav>
-        <Switch>
-          <Route exact path="/Home" component={Home} />
+        <Routes>
+          <Route exact path="/Home" element={<Home 
+                      swapDisplayCallback = {this.swapContainerOnDisplay} 
+          /> } />
 
-          <Route exact path="/Event" component={Event} />
+          <Route exact path="/Event" element={ <Event 
+                  swapDisplayCallback = {this.swapContainerOnDisplay} 
+          />} />
 
-          <Route exact path="/AboutUs" component={AboutUs} />
+          <Route exact path="/AboutUs" element={ <AboutUs
+                      swapDisplayCallback = {this.swapContainerOnDisplay}
+          /> } />
 
-          <Route exact path="/Appointment" component={Appointment} />
-        </Switch>
+          <Route exact path="/Appointment" element={ <Appointment 
+            swapDisplayCallback = {this.swapContainerOnDisplay}
+            getEventListCallback = {this.getcalendarEventList}
+            addEventCallback = {this.addCalendarEvent}
+            deleteEventCallback = {this.deleteCalendarEvent}
+            resetEventColorCallBack = {this.resetEventColor}
+          /> } />
+        </Routes>
 
       </Router>
 
@@ -163,7 +157,7 @@ export default class App extends Component {
   displayHome() {
     return (
       <div className="home-img-box">
-        <img className="home-img" src={HomeImg} />
+        <img className="home-img" src={HomeImg} alt="A field or roses"/>
         <p className="home-text">“Every flower is a soul blossoming in nature.” – Gerard De Nerval</p>
       </div>
     )
@@ -182,7 +176,7 @@ export default class App extends Component {
         {this.navBar()}
 
         <Router>
-          <Redirect to='/Home' />  
+          <Navigate to='/Home' />  
         </Router>
 
         <div id="home-container">

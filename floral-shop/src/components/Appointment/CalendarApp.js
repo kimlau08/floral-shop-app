@@ -111,10 +111,11 @@ export default class CalendarApp extends React.Component {
       tempDeletedEventArgs.push(arg);  //track marked event to continue color highlight on re-renders
       tempDeletedEventArgs.map( arg => arg.el.style.backgroundColor = 'orange' );
 
-      this.state.calendarEvents.map(obj => {if (obj.title === eventObj.title && 
+      this.state.calendarEvents.foreach(obj => {if (obj.title === eventObj.title && 
                                                  obj.start.toString() === eventObj.start.toString()) {
                                                     obj.backgroundColor = 'orange'
-                                            }}
+                                            }
+                                          }
                                         );
 
       window.alert("To reschedule, please add another event. Otherwise, click 'Update Booking' to complete")

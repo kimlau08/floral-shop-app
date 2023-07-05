@@ -1,5 +1,5 @@
 import React from 'react';
-import {Route, Link, Switch, BrowserRouter as Router } from 'react-router-dom';
+import {Route, Link, Routes, BrowserRouter as Router } from 'react-router-dom';
 
 import Home from './Home';
 import Event from './Event';
@@ -26,7 +26,7 @@ function NavBar () {
                     </li>
                 </ul>
                 </nav>
-                <Switch>
+                <Routes>
                 <Route exact path="/Home" component={Home} />
 
                 <Route exact path="/Event" component={Event} />
@@ -34,7 +34,7 @@ function NavBar () {
                 <Route exact path="/AboutUs" component={AboutUs} />
 
                 <Route exact path="/Appointment" component={Appointment} />
-                </Switch>
+                </Routes>
             </Router>
 
         </div>

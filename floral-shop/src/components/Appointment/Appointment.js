@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import './Appointment.css';
 
-import { Redirect } from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
 
 import axios from 'axios';
 import config from '../../config/config';
@@ -64,7 +64,7 @@ export default class Appointment extends Component {
         //Redirect back to root (App component)
         this.setState( { redirectToHome: true } ); 
         //swap back to the Home component display before redirect
-        this.props.location.swapDisplayCallback("home-container", this.props);
+        this.props.swapDisplayCallback("home-container", this.props);
     }
     
     handleReserve(event) {
@@ -95,7 +95,7 @@ export default class Appointment extends Component {
             this.setState( {bookingList: bookings} );
 
             //delete events marked for deletion        
-            tempDeletedEvents.map(eventObj => {this.props.location.deleteEventCallback(eventObj)}  )
+            tempDeletedEvents.foreach(eventObj => {this.props.deleteEventCallback(eventObj)}  )
             
             tempEvents = [];  //clear unconfirmed events
             tempDeletedEvents = [];
@@ -108,10 +108,10 @@ export default class Appointment extends Component {
     handleCancel(event) {
 
         //delete unconfirmed temp event
-        tempEvents.map(eventObj => {this.props.location.deleteEventCallback(eventObj)}  )
+        tempEvents.foreach(eventObj => {this.props.deleteEventCallback(eventObj)}  )
 
         //reset highlight color for events marked for deletion 
-        tempDeletedEvents.map(eventObj => {this.props.location.resetEventColorCallBack(eventObj)}  )
+        tempDeletedEvents.foreach(eventObj => {this.props.resetEventColorCallBack(eventObj)}  )
 
         tempEvents = [];  //clear unconfirmed events
         tempDeletedEvents = [];
@@ -150,7 +150,7 @@ export default class Appointment extends Component {
 
     render() {
 
-        if (this.props.location.swapDisplayCallback === undefined) {
+        if (this.props.swapDisplayCallback === undefined) {
             return <div></div>    //no callback to make query
         }
 
@@ -159,7 +159,7 @@ export default class Appointment extends Component {
         let nameInputId="name-input"
         if (! this.state.redirectToHome) {  //do not overwrite display setup by filter form if redirecting away 
             
-            this.props.location.swapDisplayCallback(toContainerId, this.props);
+            this.props.swapDisplayCallback(toContainerId, this.props);
         }
 
         return (
@@ -167,7 +167,7 @@ export default class Appointment extends Component {
             <div id={toContainerId}>
 
                 {this.state.redirectToHome &&
-                    <Redirect to='/Home' />    //route back to root (App component) depending on state
+                    <Navigate to='/Home' />    //route back to root (App component) depending on state
                 }
 
                 <p className="reservation-title">Brighten someone's day with flowers</p>
@@ -223,9 +223,9 @@ export default class Appointment extends Component {
                         updateDateTimeCallBack={this.updateDateTime}
                         markDateTimeCallBack={this.markDateTimeDeleted}
                         
-                        getEventListCallback={this.props.location.getEventListCallback}
-                        addEventCallback={this.props.location.addEventCallback}
-                        deleteEventCallback={this.props.location.deleteEventCallback}
+                        getEventListCallback={this.props.getEventListCallback}
+                        addEventCallback={this.props.addEventCallback}
+                        deleteEventCallback={this.props.deleteEventCallback}
                     />
                 </div>
 
